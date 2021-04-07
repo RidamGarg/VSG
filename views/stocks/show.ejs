@@ -1,0 +1,168 @@
+<%- layout('./layout/boilerplate') %> 
+<script>
+  function numberWithCommas(x) {
+    return x.toString().split('.')[0].length > 3 ? x.toString().substring(0,x.toString().split('.')[0].length-3).replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + x.toString().substring(x.toString().split('.')[0].length-3): x.toString();
+}
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 offset-lg-3 mb-5 col-md-10 offset-md-1">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h3 class="card-title"><%= result[0].symbol %></h3>
+                    <h4 class="card-title mb-2"><span class="fw-bold">&#8377;</span><%=  result[0].lastPrice.toFixed(2)%></h4>
+                    <h5 class="card-subtitle mb-2 <%= result[0].change>0?'text-success':'text-danger' %>">
+                        <%= result[0].change>0?`+${result[0].change.toFixed(2)}`:result[0].change.toFixed(2) %>(<%= result[0].pChange.toFixed(2)>0?result[0].pChange.toFixed(2):-result[0].pChange.toFixed(2) %>%)
+                    </h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                          <div class="text-muted text-start d-flex justify-content-between">
+                            <figure class="mb-0">
+                              <blockquote class="blockquote mb-0">
+                                <p>Low Today</p>
+                              </blockquote>
+                              <figcaption class="my-0 float-start">
+                                <span class="fw-bold">&#8377;</span><%= result[0].dayLow.toFixed(2) %></cite>
+                              </figcaption>
+                            </figure>
+                          <figure class="mb-0">
+                              <blockquote class="blockquote mb-0">
+                                <p>High Today</p>
+                              </blockquote>
+                              <figcaption class="my-0 float-end">
+                                <span class="fw-bold">&#8377;</span><%= result[0].dayHigh.toFixed(2) %></cite>
+                              </figcaption>
+                            </figure>
+                          </div>
+                              <input type="range" class="form-range my-0" min="<%= result[0].dayLow %>" max="<%= result[0].dayHigh.toFixed(2) %>"value="<%= result[0].lastPrice.toFixed(2) %>" id="customRange2"disabled>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="text-muted text-start d-flex justify-content-between">
+                              <figure class="mb-0">
+                                <blockquote class="blockquote mb-0">
+                                  <p>52W Low</p>
+                                </blockquote>
+                                <figcaption class="my-0 float-start">
+                                  <span class="fw-bold">&#8377;</span><%= result[0].yearLow.toFixed(2) %></cite>
+                                </figcaption>
+                              </figure>
+                            <figure class="mb-0">
+                                <blockquote class="blockquote mb-0">
+                                  <p>52W High</p>
+                                </blockquote>
+                                <figcaption class="my-0 float-end">
+                                  <span class="fw-bold">&#8377;</span><%= result[0].yearHigh.toFixed(2) %></cite>
+                                </figcaption>
+                              </figure>
+                            </div>
+                              <input type="range" class="form-range my-0" min="<%= result[0].yearLow.toFixed(2) %>" max="<%= result[0].yearHigh.toFixed(2) %>"value="<%= result[0].lastPrice.toFixed(2) %>" id="customRange2"disabled>
+                        </li>
+                        <% if(share){ %> 
+                          <li class="list-group-item text-muted text-start px-3 py-3">
+                            <h5>Your Holdings</h5>
+                            <div class="d-flex justify-content-between px-3 py-2 border border-light bg-light" id="getMoreInfo">
+                              <figure>
+                                <blockquote class="blockquote mb-0 fs-6">
+                                  <p><%= share.volume %> shares</p>
+                                </blockquote>
+                                <figcaption class="my-0 float-start fs-6">
+                                    Totat Returns <span class="<%= (result[0].lastPrice)-(share.average)>0?'text-success':'text-danger' %>">
+                                    <span class="fw-bold">&#8377;</span><%= ((share.volume*result[0].lastPrice)-(share.volume*share.average)).toFixed(2) %>(<%= (((result[0].lastPrice-share.average)/share.average)*100).toFixed(2)>0
+                                   ?(((result[0].lastPrice-share.average)/share.average)*100).toFixed(2):-(((result[0].lastPrice-share.average)/share.average)*100).toFixed(2) %>%)
+                                    </span>
+                                  </cite>
+                                </figcaption>
+                              </figure>
+                            <figure>
+                                <blockquote class="blockquote mb-0 fs-6">
+                                  <p>Avg Price <span class="fw-bold">&#8377;</span><%= share.average.toFixed(2) %></p>
+                                </blockquote>
+                              </figure>
+                            </div>
+                          </li>
+                          <% } %> 
+                        <li class="list-group-item text-muted text-start d-flex justify-content-between">
+                            <figure>
+                                <blockquote class="blockquote mb-0">
+                                  <p><span class="fw-bold">&#8377;</span><%= result[0].open.toFixed(2) %></p>
+                                </blockquote>
+                                <figcaption class="my-0 float-start">
+                                    Open</cite>
+                                </figcaption>
+                              </figure>
+                            <figure>
+                                <blockquote class="blockquote mb-0">
+                                  <p><span class="fw-bold">&#8377;</span><%= result[0].previousClose.toFixed(2) %></p>
+                                </blockquote>
+                                <figcaption class="my-0 float-end">
+                                    Prev. Close</cite>
+                                </figcaption>
+                              </figure>
+                    </li>
+                    <li class="list-group-item text-muted text-start d-flex justify-content-between">
+                        <figure>
+                            <blockquote class="blockquote mb-0">
+                              <p><%= result[0].totalTradedVolume %></p>
+                            </blockquote>
+                            <figcaption class="my-0 float-start">
+                                Traded Volume</cite>
+                            </figcaption>
+                          </figure>
+                        <figure>
+                            <blockquote class="blockquote mb-0">
+                              <p><span class="fw-bold">&#8377;</span><%= result[0].totalTradedValue.toFixed(2) %></p>
+                            </blockquote>
+                            <figcaption class="float-end my-0">
+                                Traded Value</cite>
+                            </figcaption>
+                          </figure>
+                    </li>
+                    <li class="list-group-item text-muted text-start d-flex justify-content-between">
+                        <figure>
+                            <blockquote class="blockquote mb-0">
+                              <p class="<%= result[0].perChange30d>0?'text-success':'text-danger' %>">
+                                <%= result[0].perChange30d>0?`+${result[0].perChange30d.toFixed(2)}`:result[0].perChange30d.toFixed(2) %>%
+                            </p>
+                            </blockquote>
+                            <figcaption class="my-0 float-start">
+                                30d%</cite>
+                            </figcaption>
+                          </figure>
+                        <figure>
+                            <blockquote class="blockquote mb-0">
+                              <% if(result[0].perChange365d!=='-') {%> 
+                                <p class="<%= result[0].perChange365d>0?'text-success':'text-danger' %>">
+                                    <%= result[0].perChange365d>0?`+${result[0].perChange365d.toFixed(2)}`:result[0].perChange365d.toFixed(2) %>%
+                                </p>
+                                <% }else{ %>
+                                  <p>N/A</p>
+                                  <% } %>  
+                            </blockquote>
+                            <figcaption class="my-0 float-end">
+                                365d%</cite>
+                            </figcaption>
+                          </figure>
+                    </li>
+                    <% if(currentUser&&!result[0].symbol.includes(' ')){ %> 
+                      <li class="list-group-item text-muted text-start d-flex justify-content-between my-2">
+                        <a href="" class="btn btn-lg btn-outline-success float-start"data-bs-toggle="modal" data-bs-target="#shareModal" data-bs-content="SELL <%= result[0].symbol %>@<%=  result[0].lastPrice.toFixed(2)%>" data-bs-class="btn btn-outline-success" data-bs-button="SELL" data-bs-href="<%= result[0].symbol %>/SELL">
+                          SELL
+                        </a>
+                        <a href="" class="btn btn-lg btn-success float-end" data-bs-toggle="modal"data-bs-target="#shareModal" data-bs-content="BUY <%= result[0].symbol %>@<%=  result[0].lastPrice.toFixed(2)%>" data-bs-class="btn btn-success" data-bs-button="BUY" data-bs-href="<%= result[0].symbol %>/BUY">
+                          BUY
+                        </a>
+                        </li>
+                      <% }else if(currentUser){ %> 
+                        <li class="list-group-item d-grid gap-2 my-2">
+                          <a class="btn btn-success btn-lg" href="/nifty/<%= result[0].symbol.split(' ').splice(1).join('!') %> "><%= result[0].symbol %> STOCKS</a>
+                        </li>
+                        <% } %> 
+                      </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/Modal') %> 
+<script src="/js/getModal.js"></script>

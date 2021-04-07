@@ -1,0 +1,7 @@
+#getBg li{
+    background-color:  #f8f9fa !important;
+    border: 0px !important;
+}
+#SellButton:hover{
+    background-color: #198754 !important ;
+}

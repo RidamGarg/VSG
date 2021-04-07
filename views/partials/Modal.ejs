@@ -1,0 +1,26 @@
+<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" onload="document.querySelector('form').shares.focus()">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="POST" action="">
+        <div class="modal-body">
+          <div class="mb-3">
+              <label for="Shares" class="col-form-label">Shares NSE</label>
+              <input type="number" class="form-control" id="Shares"name="shares" required autofocus>
+            </div>
+            <div class="mb-3">
+              <label for="marketPrice" class="col-form-label">Price Market</label>
+              <input type="number" class="form-control" id="marketPrice" value="<%=  result.length  ? result[0].lastPrice.toFixed(2):market[0].lastPrice.toFixed(2) %>" disabled>
+            </div>
+          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button class="btn float-end"type="submit" id="change">Button</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>

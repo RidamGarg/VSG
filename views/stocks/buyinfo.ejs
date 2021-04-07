@@ -1,0 +1,44 @@
+<%- layout('./layout/boilerplate') %> 
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 offset-lg-3 mb-5 col-md-10 offset-md-1">
+            <h3 class="text-center fw-bold mb-5">Holding Details</h3>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title d-flex justify-content-between mb-5"><span><%= buyed.name %> </span><span><%= buyed.volume %>  shares</span></h5>
+                    <ul class="list-group list-group-flush" id="getBg">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><span class="me-1 fw-bold">Current</span>    <span class="fw-bold">&#8377;</span><%= (buyed.volume*market[0].lastPrice).toFixed(2) %></span>
+                            <span><span class="me-1 fw-bold">Mkt. Price</span>    <span class="fw-bold">&#8377;</span><%= market[0].lastPrice.toFixed(2) %></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><span class="me-1 fw-bold">Invested</span>    <span class="fw-bold">&#8377;</span><%= (buyed.volume*buyed.average).toFixed(2) %></span>
+                            <span><span class="me-1 fw-bold">Avg. Price</span>    <span class="fw-bold">&#8377;</span><%= (buyed.average).toFixed(2) %></span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="fw-bold me-1">
+                                Totat Returns <span class="<%= (market[0].lastPrice)-(buyed.average)>0?'text-success':'text-danger' %>">
+                                    <span class="fw-bold">&#8377;</span><%= ((buyed.volume*market[0].lastPrice)-(buyed.volume*buyed.average)).toFixed(2) %>(<%= (((market[0].lastPrice-buyed.average)/buyed.average)*100).toFixed(2)>0
+                                   ?(((market[0].lastPrice-buyed.average)/buyed.average)*100).toFixed(2):-(((market[0].lastPrice-buyed.average)/buyed.average)*100).toFixed(2) %>%)
+                                    </span>
+                            </span>
+                        </li>
+                        <li class="list-group-item">
+                            <span><span class="me-1 fw-bold">Latest Date on which shares bought</span>   <%= buyed.date %></span>
+                        </li>
+                        <li class="list-group-item text-muted text-start d-flex justify-content-between mb-2">
+                            <a href="" class="btn btn-lg btn-outline-success float-start bg-white" id="SellButton" data-bs-toggle="modal" data-bs-target="#shareModal" data-bs-content="SELL <%= market[0].symbol %>@<%=  market[0].lastPrice.toFixed(2)%>" data-bs-class="btn btn-outline-success" data-bs-button="SELL" data-bs-href="<%= buyed.name %>/SELL">
+                              SELL
+                            </a>
+                            <a href="" class="btn btn-lg btn-success float-end" data-bs-toggle="modal"data-bs-target="#shareModal" data-bs-content="BUY <%= market[0].symbol %>@<%=  market[0].lastPrice.toFixed(2)%>" data-bs-class="btn btn-success" data-bs-button="BUY MORE" data-bs-href="<%= buyed.name %>/BUY">
+                              BUY MORE
+                            </a>
+                            </li>
+                      </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../partials/Modal') %> 
+<script src="/js/getModal.js"></script>
