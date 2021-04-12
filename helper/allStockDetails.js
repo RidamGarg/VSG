@@ -1,5 +1,5 @@
 const {getStockPrices,getPartucularStockPrices} = require('../apiFunctions/NSE');
-const stockModel = require('../model/stock');
+const User = require('../model/user');
 
 module.exports.getAllHomeIndices = async(Indices)=>{
 return Promise.all(Indices.map(str=>{
@@ -23,8 +23,9 @@ module.exports.getSpecific = async(stock,ext = 'eqn')=>{
     return getPartucularStockPrices(stock+ext)
 }
 //Take id from req.user and get stocks details from that.
-module.exports.makePortfolio =  async()=>{
-const allStocks = await stockModel.find({});
+module.exports.makePortfolio =  async(_id)=>{
+const user = await User.findOne({_id});
+const allStocks = user.trades ;
 let totalInvested = 0 ;
 const indices = allStocks.map((obj)=>{
     totalInvested += obj.average*obj.volume

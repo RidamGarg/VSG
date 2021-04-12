@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const stockModel = require('../model/stock');
 const allIndices = require('../seeds/allindices');
 const ExpressError = require('../utils/ExpressError');
 const {isLoggedin} = require('../middleware')
 const catchAsync = require('../utils/catchAsync');
+const User = require('../model/user');
+
 const {getAllHomeIndices,getAllportfolioStocks,getSpecific,getAll,makePortfolio} = require('../helper/allStockDetails');
 router.get('/',catchAsync(async(req,res)=>{
     const response = await getAllHomeIndices(allIndices);
@@ -33,14 +34,20 @@ else{
 }
 }))
 router.get('/portfolio',isLoggedin,async(req,res)=>{
-    const obj = await makePortfolio()
+    const obj = await makePortfolio(req.user._id)
     res.render('user/portfolio',{...obj});
  })
 router.get('/:stock',catchAsync(async(req,res,next)=>{
-        let {stock}=req.params
-         //stock = stock.split('!').join(' ');
+        let {stock}=req.params;
         const result = await getSpecific(stock);
-        const share = await stockModel.findOne({name:stock.toUpperCase()});
+        let share ;
+        if(!req.user){
+          share = null ;
+        }
+        else{
+            const user = await User.findOne({_id:req.user._id});
+             share = user.trades[0];
+        }
     if(result.length){
         res.render('stocks/show',{result,share});
     }
@@ -51,27 +58,31 @@ router.get('/:stock',catchAsync(async(req,res,next)=>{
 }))
 //Take id from req.user and push stocks detail in that.
 router.post('/:stock/BUY',isLoggedin,catchAsync(async(req,res)=>{
+    const user = await User.findById(req.user._id);
     const {shares} = req.body ;
     const result = await getSpecific(req.params.stock);
-    let shareInfo = await stockModel.findOne({name:result[0].symbol});
-    if(shareInfo){
-        const average = (result[0].lastPrice*parseInt(shares)+shareInfo.average*shareInfo.volume)/(shareInfo.volume+parseInt(shares));
-        shareInfo.average = average.toFixed(2)
-        shareInfo.volume += parseInt(shares) ;
-       shareInfo = await shareInfo.save();
+    const shareInfo = await User.find({_id:req.user._id,"trades.name":req.params.stock.toUpperCase()},{_id:0, "trades.$":1});
+    if(shareInfo.length){
+        const share = shareInfo[0].trades[0] ;
+        const average = (result[0].lastPrice*parseInt(shares)+share.average*share.volume)/(share.volume+parseInt(shares));
+        const avg = average.toFixed(2);
+        const volume = share.volume + parseInt(shares) ;
+        await User.updateOne({_id:req.user._id,"trades":{$elemMatch: {"name":req.params.stock.toUpperCase()}}},{$set:{"trades.$.volume":volume,"trades.$.average":avg}});
        req.flash('success',`You successfully bought ${shares} shares in ${req.params.stock}`)
        res.redirect('/portfolio')
+       
     }
     else{
-    const stock = new stockModel({
+    const stock = {
         name:result[0].symbol,
         price:result[0].lastPrice,
         date:result[0].lastUpdateTime.split(' ')[0],
         time:result[0].lastUpdateTime.split(' ')[1],
         volume:shares,
         average:result[0].lastPrice
-    })
-    await stock.save()
+    }
+    user.trades.push(stock);
+    await user.save()
     req.flash('success',`You successfully bought ${shares} shares in ${req.params.stock}`)
     res.redirect('/portfolio')
 }
@@ -87,15 +98,15 @@ router.post('/:stock/SELL',isLoggedin,catchAsync(async(req,res)=>{
     const {id,stock} = req.params
     const {shares} = req.body ;
     const result = await getSpecific(req.params.stock);  
-    let shareInfo = await stockModel.findOne({name:result[0].symbol});
-    if(shareInfo&&shareInfo.volume>parseInt(shares)){
-        shareInfo.volume -= parseInt(shares)
-        shareInfo = await shareInfo.save();
+    const shareInfo = await User.find({_id:req.user._id,"trades.name":req.params.stock.toUpperCase()},{_id:0, "trades.$":1});
+    if(shareInfo.length&&shareInfo[0].trades[0].volume>parseInt(shares)){
+        const volume = shareInfo[0].trades[0].volume- parseInt(shares)
+        await User.updateOne({_id:req.user._id,"trades":{$elemMatch: {"name":req.params.stock.toUpperCase()}}},{$set:{"trades.$.volume":volume}});
         req.flash('success',`You successfully sold ${shares} shares of ${stock}`)
         res.redirect('/portfolio')
     }
-    else if(shareInfo&&shareInfo.volume===parseInt(shares)){
-        await stockModel.deleteOne({name:result[0].symbol})
+    else if(shareInfo.length&&shareInfo[0].trades[0].volume===parseInt(shares)){
+        await User.updateOne({_id:req.user._id},{$pull: {"trades":{"name":req.params.stock.toUpperCase()}}});
         req.flash('success',`You successfully sold ${shares} shares of ${stock}`)
         res.redirect('/portfolio')
     }
@@ -108,7 +119,8 @@ router.post('/:stock/SELL',isLoggedin,catchAsync(async(req,res)=>{
 router.get('/:stock/details',isLoggedin,catchAsync(async(req,res)=>{
     const {id,stock} = req.params ;
     const market = await getSpecific(stock);
-    const buyed = await stockModel.findOne({name:stock.toUpperCase()});
+    const user = await User.findOne({_id:req.user._id});
+    const buyed = user.trades[0] ;
     res.render('stocks/buyinfo',{market,buyed,result:{}});
 }))
 module.exports = router
