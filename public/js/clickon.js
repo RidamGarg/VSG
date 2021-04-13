@@ -3,7 +3,8 @@ let close = true ;
 $('.niftyIndices').click(function(){
     const title = $(this).find('.symbol').text();
     const str = title.split(' ').splice(1).join('!');
-    window.location.href = `http://localhost:3000/nifty/${str}` ;
+    const href = window.location.href ;
+    window.location.href = `${href}/${str}` ;
 })
 $('.stockIndices').click(function(){
     const title = $(this).find('.symbol').text();
@@ -15,7 +16,8 @@ $('.stockIndices').click(function(){
     // else{
     //   href = arr[0]
     // }
-    window.location.href = `http://localhost:3000/${title}`
+    const href = window.location.href ;
+    window.location.href = `${href}/${title}`
 })
 $('.stockIndices,.niftyIndices,#getMoreInfo').mouseover(function(){
    $(this).addClass('shadow')
@@ -28,8 +30,9 @@ $('#getMoreInfo').click(function(){
   window.location.href = `${url}/details`
 })
 $('.getClick').click(function(){
-  const href = $(this).attr('data-bs-href');
-  window.location.href = `http://localhost:3000/${href}` ;
+  const href2 = $(this).attr('data-bs-href');
+  const href = window.location.href ;
+  window.location.href = `${href}/${href2}` ;
 })
 function openNav() {
   document.getElementById("mySidepanel").style.width = "300px";
