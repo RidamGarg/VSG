@@ -29,7 +29,7 @@ if(result.length){
 res.render('stocks/all',{result});
 }
 else{
-    req.flash('error','Currently,We are having problem to retrieve information about it')
+    req.flash('error','Currently,We are having problem to retrieve information about it') 
     res.redirect('/')
 }
 }))

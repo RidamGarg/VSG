@@ -12,7 +12,7 @@ const User = require('./model/user')
 const session = require('express-session');
 const LocalStrategy = require('passport-local');
 const passport = require('passport');
-const dbUrl = process.env.dbUrl;
+const dbUrl = process.env.dbUrl || 'mongodb://localhost:27017/Stock' ;
 const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 mongoose.connect(dbUrl,{

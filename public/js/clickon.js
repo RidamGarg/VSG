@@ -71,6 +71,6 @@ aTag.setAttribute('href',`/nifty/${href}`);
 aTag.innerText = 'NIFTY '+indice.toUpperCase();
 mydiv.appendChild(aTag);
 }
-// setInterval(() => {
-//   window.location.reload()  
-// },62*1000);
+setInterval(() => {
+  window.location.reload()  
+},30*1000);
