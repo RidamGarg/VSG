@@ -1,10 +1,10 @@
 $('.stockIndices,.niftyIndices,#getMoreInfo,.getClick').css('cursor','pointer') 
 let close = true ;
+const url = 'https://virtual-trading-1.herokuapp.com';
 $('.niftyIndices').click(function(){
     const title = $(this).find('.symbol').text();
     const str = title.split(' ').splice(1).join('!');
-    const href = window.location.href ;
-    window.location.href = `${href}${str}` ;
+    window.location.href = `${url}/nifty/${str}` ;
 })
 $('.stockIndices').click(function(){
     const title = $(this).find('.symbol').text();
@@ -16,8 +16,7 @@ $('.stockIndices').click(function(){
     // else{
     //   href = arr[0]
     // }
-    const href = window.location.href ;
-    window.location.href = `${href}${title}`
+    window.location.href = `${url}/${title}`
 })
 $('.stockIndices,.niftyIndices,#getMoreInfo').mouseover(function(){
    $(this).addClass('shadow')
@@ -26,13 +25,12 @@ $('.stockIndices,.niftyIndices,#getMoreInfo').mouseleave(function(){
   $(this).removeClass('shadow')
 })
 $('#getMoreInfo').click(function(){
-  const url = window.location.href ;
-  window.location.href = `${url}/details`
+  const suburl = window.location.href ;
+  window.location.href = `${suburl}/details`
 })
 $('.getClick').click(function(){
-  const href2 = $(this).attr('data-bs-href');
-  const href = window.location.href ;
-  window.location.href = `${href}${href2}` ;
+  const href = $(this).attr('data-bs-href');
+  window.location.href = `${url}/${href}` ;
 })
 function openNav() {
   document.getElementById("mySidepanel").style.width = "300px";
