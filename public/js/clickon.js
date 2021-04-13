@@ -4,7 +4,7 @@ $('.niftyIndices').click(function(){
     const title = $(this).find('.symbol').text();
     const str = title.split(' ').splice(1).join('!');
     const href = window.location.href ;
-    window.location.href = `${href}/${str}` ;
+    window.location.href = `${href}${str}` ;
 })
 $('.stockIndices').click(function(){
     const title = $(this).find('.symbol').text();
@@ -17,7 +17,7 @@ $('.stockIndices').click(function(){
     //   href = arr[0]
     // }
     const href = window.location.href ;
-    window.location.href = `${href}/${title}`
+    window.location.href = `${href}${title}`
 })
 $('.stockIndices,.niftyIndices,#getMoreInfo').mouseover(function(){
    $(this).addClass('shadow')
@@ -32,7 +32,7 @@ $('#getMoreInfo').click(function(){
 $('.getClick').click(function(){
   const href2 = $(this).attr('data-bs-href');
   const href = window.location.href ;
-  window.location.href = `${href}/${href2}` ;
+  window.location.href = `${href}${href2}` ;
 })
 function openNav() {
   document.getElementById("mySidepanel").style.width = "300px";
