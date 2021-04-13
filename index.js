@@ -29,7 +29,13 @@ app.use(express.static(path.join(__dirname,'public')))
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie:{
+   httpOnly:true,
+   //secure:true,
+   expires:Date.now()+1000*60*60*24*7,
+   maxAge:1000*60*60*24*7
+}
 }))
 app.use(flash());
 app.use(passport.initialize());
