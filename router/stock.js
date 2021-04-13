@@ -45,8 +45,9 @@ router.get('/:stock',catchAsync(async(req,res,next)=>{
           share = null ;
         }
         else{
-            const user = await User.findOne({_id:req.user._id});
-             share = user.trades[0];
+            const shareInfo = await User.find({_id:req.user._id,"trades.name":req.params.stock.toUpperCase()},{_id:0, "trades.$":1});
+            if(shareInfo.length) share = shareInfo[0].trades[0] ;
+             else share = null ;
         }
     if(result.length){
         res.render('stocks/show',{result,share});

@@ -1,5 +1,6 @@
-$('.stockIndices,.niftyIndices,#getMoreInfo,.getClick').css('cursor','pointer') 
+$('.stockIndices,.niftyIndices,#getMoreInfo,.getClick').css('cursor','pointer'); 
 let close = true ;
+// const url = 'http://localhost:3000';
 const url = 'https://virtual-trading-1.herokuapp.com';
 $('.niftyIndices').click(function(){
     const title = $(this).find('.symbol').text();
@@ -25,8 +26,8 @@ $('.stockIndices,.niftyIndices,#getMoreInfo').mouseleave(function(){
   $(this).removeClass('shadow')
 })
 $('#getMoreInfo').click(function(){
-  const suburl = window.location.href ;
-  window.location.href = `${suburl}/details`
+  const stock = window.location.href.split('/')[3];
+  window.location.href = `${url}/${stock}/details`
 })
 $('.getClick').click(function(){
   const href = $(this).attr('data-bs-href');
