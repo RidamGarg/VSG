@@ -19,3 +19,4 @@ For back-end, following tech stack were used:
 3) Passport.js
 4) Mongo DB
 5) Mongoose ODM
+6) Latest Stock Price API
