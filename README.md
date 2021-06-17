@@ -3,7 +3,7 @@ Open App using [https://virtual-trading-1.herokuapp.com](https://virtual-trading
 
 What's this project about?
 
-It's an web app where user can see all the details of all the nifty indices and details of all the stocks comes under these indices.By registering into the app user can also buy and sell shares on the market price in their preferred stocks.The app also have a portfolio section where user can see their buyed shares and can also see profit and loss on them.
+It's an web app where user can see all the details of all the nifty indices and details of all the stocks comes under these indices.By registering into the app user can also buy and sell shares on the market price in their preferred stocks.The app also have a portfolio section where user can see their buyed shares and can also see profit and loss in them.
 
 For front-end, following tech stack were used:
 1) HTML
